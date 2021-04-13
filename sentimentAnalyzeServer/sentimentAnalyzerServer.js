@@ -4,6 +4,7 @@ const app = new express();
 const dotenv =require('dotenv');
 dotenv.config();
 
+//git test
 function getNLUInstance() {
     let api_key =process.env.api_key;
     let api_url =process.env.api_url;
