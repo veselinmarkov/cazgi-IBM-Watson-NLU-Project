@@ -6,8 +6,8 @@ dotenv.config();
 
 //git test
 function getNLUInstance() {
-    let api_key =process.env.api_key;
-    let api_url =process.env.api_url;
+    let api_key =process.env.API_KEY;
+    let api_url =process.env.API_URL;
     
     const NaturalLanguageUnderstandingV1 =require('ibm-watson/natural-language-understanding/v1');
     const { IamAuthenticator} =require('ibm-watson/auth');
@@ -31,8 +31,22 @@ app.get("/",(req,res)=>{
   });
 
 app.get("/url/emotion", (req,res) => {
-
-    return res.send({"happy":"90","sad":"10"});
+    let params = {
+        url: req.params.url,
+        features: {
+            emotiones: {}
+        }
+    }
+    let naturalLanguageUnderstanding = getNLUInstance();
+    naturalLanguageUnderstanding.analyze(params)
+      .then(analysisResults => {
+        console.log(JSON.stringify(analysisResults, null, 2));
+        return res.send(analysisResults.emotione);
+      })
+      .catch(err => {
+        console.log('error:', err);
+        return res.send(err);
+      });
 });
 
 app.get("/url/sentiment", (req,res) => {
